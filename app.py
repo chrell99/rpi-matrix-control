@@ -73,19 +73,19 @@ def create_app(media_folder, thumb_folder):
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Media Launcher</title>
-  <link rel="stylesheet" href="/static/style.css">
+    <title>rpi-matrix-control</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <main class="grid">
 % for item in display_items:
-  <a href="/media/{{item['file']}}" target="_blank">
-    % if item['type'] == 'video':
-      <img src="/thumbnails/{{item['thumb']}}">
-    % else:
-      <img src="/media/{{item['file']}}">
-    % end
-  </a>
+    <button class="media-item" data-file="{{item['file']}}">
+        % if item['type'] == 'video':
+            <img src="/thumbnails/{{item['thumb']}}">
+        % else:
+            <img src="/media/{{item['file']}}">
+        % end
+    </button>
 % end
 </main>
 </body>
