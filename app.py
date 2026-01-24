@@ -1,47 +1,75 @@
 from bottle import Bottle, static_file, template, run
 import os
+import argparse
 
-# Folders
-MEDIA_FOLDER = os.path.join(os.path.dirname(__file__), "hoolacane_media")
-THUMB_FOLDER = os.path.join(os.path.dirname(__file__), "thumbnails")
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Simple Media Launcher Web App"
+    )
+    parser.add_argument(
+        '--media-folder',
+        default=os.path.expanduser("~/media"),
+        help='Folder where media files are stored (default: ~/media)'
+    )
+    parser.add_argument(
+        '--thumb-folder',
+        default=os.path.expanduser("~/thumbnails"),
+        help='Folder where thumbnail images are stored (default: ~/thumbnails)'
+    )
+    parser.add_argument(
+        '--host',
+        default='0.0.0.0',
+        help='Host to run the server on (default: 0.0.0.0)'
+    )
+    parser.add_argument(
+        '--port',
+        type=int,
+        default=8080,
+        help='Port to run the server on (default: 8080)'
+    )
+    return parser.parse_args()
 
-app = Bottle()
+def create_app(media_folder, thumb_folder):
+    # Ensure folders exist
+    os.makedirs(media_folder, exist_ok=True)
+    os.makedirs(thumb_folder, exist_ok=True)
 
-# Serve static files
-@app.route('/static/<filename:path>')
-def serve_static(filename):
-    return static_file(filename, root='static')
+    app = Bottle()
 
-# Serve media files
-@app.route('/media/<filename:path>')
-def serve_media(filename):
-    return static_file(filename, root=MEDIA_FOLDER)
+    # Serve static files
+    @app.route('/static/<filename:path>')
+    def serve_static(filename):
+        return static_file(filename, root='static')
 
-# Serve thumbnails
-@app.route('/thumbnails/<filename:path>')
-def serve_thumb(filename):
-    return static_file(filename, root=THUMB_FOLDER)
+    # Serve media files
+    @app.route('/media/<filename:path>')
+    def serve_media(filename):
+        return static_file(filename, root=media_folder)
 
-@app.route('/')
-def index():
-    media_files = os.listdir(MEDIA_FOLDER)
-    media_files = [f for f in media_files if f.lower().endswith(
-        ('.png', '.jpg', '.jpeg', '.gif', '.mp4', '.webm'))]
+    # Serve thumbnails
+    @app.route('/thumbnails/<filename:path>')
+    def serve_thumb(filename):
+        return static_file(filename, root=thumb_folder)
 
-    display_items = []
-    for f in media_files:
-        if f.lower().endswith(('.mp4', '.webm')):
-            # Use corresponding thumbnail if it exists
-            base_name = os.path.splitext(f)[0]
-            thumb_file = base_name + ".png"
-            if not os.path.exists(os.path.join(THUMB_FOLDER, thumb_file)):
-                # Optional: fallback to a placeholder
-                thumb_file = "placeholder.png"
-            display_items.append({'type': 'video', 'file': f, 'thumb': thumb_file})
-        else:
-            display_items.append({'type': 'image', 'file': f})
+    @app.route('/')
+    def index():
+        media_files = os.listdir(media_folder)
+        media_files = [f for f in media_files if f.lower().endswith(
+            ('.png', '.jpg', '.jpeg', '.gif', '.mp4', '.webm'))]
 
-    return template('''
+        display_items = []
+        for f in media_files:
+            if f.lower().endswith(('.mp4', '.webm')):
+                # Use corresponding thumbnail if it exists
+                base_name = os.path.splitext(f)[0]
+                thumb_file = base_name + ".png"
+                if not os.path.exists(os.path.join(thumb_folder, thumb_file)):
+                    thumb_file = "placeholder.png"
+                display_items.append({'type': 'video', 'file': f, 'thumb': thumb_file})
+            else:
+                display_items.append({'type': 'image', 'file': f})
+
+        return template('''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,8 +95,11 @@ def index():
 </main>
 </body>
 </html>
-    ''', display_items=display_items)
+        ''', display_items=display_items)
+
+    return app
 
 if __name__ == '__main__':
-    run(app, host='0.0.0.0', port=8080, debug=True)
-
+    args = parse_args()
+    app = create_app(args.media_folder, args.thumb_folder)
+    run(app, host=args.host, port=args.port, debug=True)
