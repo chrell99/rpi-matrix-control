@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{title or "RPI Sign Control"}}</title>
+    <title>Rpi-led-control</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/hoolacane-logo.ico">
 </head>
 <body>
 <header>
@@ -40,13 +41,19 @@
         cursor: pointer;
     }
 
+    .menu-wrapper {
+        position: relative;
+    }
+
     #menu {
         display: none;
         flex-direction: column;
         background: #444;
         position: absolute;
-        top: 50px;
-        right: 20px;
+        top: 100%;       
+        left: 0;         
+        min-width: 150px; 
+        z-index: 100;    
     }
 
     #menu.show {

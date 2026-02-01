@@ -1,0 +1,13 @@
+% rebase('base.html', title="Media Control")
+
+<main class="grid">
+% for item in display_items:
+    <button class="media-item" data-file="{{item['file']}}">
+        % if item['type'] == 'video':
+            <img src="/thumbnails/{{item['thumb']}}">
+        % else:
+            <img src="/media/{{item['file']}}">
+        % end
+    </button>
+% end
+</main>
