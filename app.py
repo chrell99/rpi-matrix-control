@@ -39,17 +39,9 @@ def parse_args():
 def create_app(media_folder, thumb_folder):
     app = Bottle()
 
-    @app.route('/static/<filename:path>')
-    def serve_static(filename):
-        return static_file(filename, root='static')
-
-    @app.route('/media/<filename:path>')
-    def serve_media(filename):
-        return static_file(filename, root=media_folder)
-
-    @app.route('/thumbnails/<filename:path>')
-    def serve_thumb(filename):
-        return static_file(filename, root=thumb_folder)
+    @app.route('/test')
+    def test():
+        return "Hello world!"
 
     @app.route('/')
     def index():
@@ -74,8 +66,9 @@ def create_app(media_folder, thumb_folder):
             <html>
             <head>
                 <title>rpi-matrix-control</title>
-                <link rel="stylesheet" href="/static/style.css">
-                <link rel="icon" type="image/x-icon" href="/static/hoolacane-logo.ico">       
+                <link rel="stylesheet" href="/static/css/style.css">
+                <link rel="icon" type="image/x-icon" href="/static/images/hoolacane-logo.ico">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
             </head>
             <body>
             <main class="grid">
