@@ -1,6 +1,6 @@
 {
-    "media_folder": "/home/pi/media",
-    "thumb_folder": "/home/pi/thumbnails",
+    "media_folder": "/home/hoolacane/media",
+    "thumb_folder": "/home/hoolacane/thumbnails",
     "host": "0.0.0.0",
     "port": 8080,
     "generate_thumbs": true
