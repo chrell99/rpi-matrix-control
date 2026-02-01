@@ -1,4 +1,13 @@
-from bottle import Bottle, static_file, template, run
+from bottle import Bottle, static_file, run, TEMPLATE_PATH
+
+# -----------------------------
+# SET PATHS FIRST (CRITICAL)
+# -----------------------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+TEMPLATE_PATH.clear()
+TEMPLATE_PATH.append(os.path.join(BASE_DIR, 'templates'))
+
 import os
 import json
 
@@ -24,8 +33,6 @@ def load_config(path=CONFIG_FILE):
 
 def create_app(media_folder, thumb_folder):
     app = Bottle()
-
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     # Serve files from /static folder
     @app.route('/static/<filepath:path>')
