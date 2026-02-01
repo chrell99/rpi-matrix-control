@@ -1,40 +1,25 @@
 from bottle import Bottle, static_file, template, run
 import os
-import argparse
+import json
 
 from services.thumbnails import generate_thumbnails
+from routes.mediaControl import setup_mediaControl
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Media Launcher Web App"
-    )
-    parser.add_argument(
-        '--media-folder',
-        default=os.path.expanduser("~/media"),
-        help='Media folder (default: ~/media)'
-    )
-    parser.add_argument(
-        '--thumb-folder',
-        default=os.path.expanduser("~/thumbnails"),
-        help='Thumbnail folder (default: ~/thumbnails)'
-    )
-    parser.add_argument(
-        '--host',
-        default='0.0.0.0',
-        help='Host (default: 0.0.0.0)'
-    )
-    parser.add_argument(
-        '--port',
-        type=int,
-        default=8080,
-        help='Port (default: 8080)'
-    )
-    parser.add_argument(
-        '--generate-thumbs',
-        action='store_true',
-        help='Generate missing thumbnails on startup'
-    )
-    return parser.parse_args()
+CONFIG_FILE = 'config.json'
+
+def load_config(path=CONFIG_FILE):
+    if not os.path.exists(path):
+        # default values if config file is missing
+        return {
+            "media_folder": os.path.expanduser("~/media"),
+            "thumb_folder": os.path.expanduser("~/thumbnails"),
+            "host": "0.0.0.0",
+            "port": 8080,
+            "generate_thumbs": False
+        }
+
+    with open(path, 'r') as f:
+        return json.load(f)
 
 def create_app(media_folder, thumb_folder):
     app = Bottle()
@@ -43,56 +28,15 @@ def create_app(media_folder, thumb_folder):
     def test():
         return "Hello world!"
 
-    @app.route('/')
-    def index():
-        media_files = [
-            f for f in os.listdir(media_folder)
-            if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.mp4', '.webm'))
-        ]
-
-        display_items = []
-        for f in media_files:
-            if f.lower().endswith(('.mp4', '.webm')):
-                base = os.path.splitext(f)[0]
-                thumb = base + ".png"
-                if not os.path.exists(os.path.join(thumb_folder, thumb)):
-                    thumb = "placeholder.png"
-                display_items.append({'type': 'video', 'file': f, 'thumb': thumb})
-            else:
-                display_items.append({'type': 'image', 'file': f})
-
-        return template('''
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>rpi-matrix-control</title>
-                <link rel="stylesheet" href="/static/css/style.css">
-                <link rel="icon" type="image/x-icon" href="/static/images/hoolacane-logo.ico">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            </head>
-            <body>
-            <main class="grid">
-            % for item in display_items:
-                <button class="media-item" data-file="{{item['file']}}">
-                    % if item['type'] == 'video':
-                        <img src="/thumbnails/{{item['thumb']}}">
-                    % else:
-                        <img src="/media/{{item['file']}}">
-                    % end
-                </button>
-            % end
-            </main>
-            </body>
-            </html>
-        ''', display_items=display_items)
+    setup_mediaControl(app, media_folder, thumb_folder)
 
     return app
 
 if __name__ == "__main__":
-    args = parse_args()
+    config = load_config()
 
-    if args.generate_thumbs:
-        generate_thumbnails(args.media_folder, args.thumb_folder)
+    if config.get("generate_thumbs"):
+        generate_thumbnails(config["media_folder"], config["thumb_folder"])
 
-    app = create_app(args.media_folder, args.thumb_folder)
-    run(app, host=args.host, port=args.port, debug=True)
+    app = create_app(config["media_folder"], config["thumb_folder"])
+    run(app, host=config.get("host", "0.0.0.0"), port=config.get("port", 8080), debug=True)
