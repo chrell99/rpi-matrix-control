@@ -11,3 +11,20 @@
     </button>
 % end
 </main>
+
+<script>
+function triggerCommand(filename) {
+    fetch('/run-media', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ file: filename })
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log("Command executed:", data);
+    })
+    .catch(err => console.error(err));
+}
+</script>
