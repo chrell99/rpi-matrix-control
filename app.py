@@ -24,10 +24,12 @@ def load_config(path=CONFIG_FILE):
 def create_app(media_folder, thumb_folder):
     app = Bottle()
 
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
     # Serve files from /static folder
     @app.route('/static/<filepath:path>')
     def serve_static(filepath):
-        return static_file(filepath, root='static')
+        return static_file(filepath, root=os.path.join(BASE_DIR, 'static'))
 
     @app.route('/test')
     def test():
