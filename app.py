@@ -4,6 +4,7 @@ import json
 
 from services.thumbnails import generate_thumbnails
 from routes.mediaControl import setup_mediaControl
+from routes.index import setup_index
 
 CONFIG_FILE = 'config.json'
 
@@ -31,9 +32,8 @@ def create_app(media_folder, thumb_folder):
     def serve_static(filepath):
         return static_file(filepath, root=os.path.join(BASE_DIR, 'static'))
 
-    @app.route('/test')
-    def test():
-        return "Hello world!"
+
+    setup_index(app)
 
     setup_mediaControl(app, media_folder, thumb_folder)
 
