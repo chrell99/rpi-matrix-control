@@ -8,7 +8,7 @@
 <body>
 <header>
     <div class="burger-menu">
-        <button id="menu-toggle">☰ Menu</button>
+        <button id="menu-btn">&#9776;</button>
         <nav id="menu" class="hidden">
             <ul>
                 <li><a href="/">Home</a></li>
@@ -20,13 +20,54 @@
 </header>
 
 <div class="content">
-    % block content % % end
+    {{!base}}
 </div>
+<style>
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #333;
+        color: white;
+        padding: 10px 20px;
+    }
 
+    #menu-btn {
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+    }
+
+    #menu {
+        display: none;
+        flex-direction: column;
+        background: #444;
+        position: absolute;
+        top: 50px;
+        right: 20px;
+    }
+
+    #menu.show {
+        display: flex;
+    }
+
+    #menu a {
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+    }
+</style>
 <script>
-document.getElementById('menu-toggle').onclick = function() {
-    document.getElementById('menu').classList.toggle('hidden');
-};
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('menu-btn');
+    const menu = document.getElementById('menu');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('show');
+    });
+});
 </script>
 </body>
 </html>
