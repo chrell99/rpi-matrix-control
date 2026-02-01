@@ -2,7 +2,7 @@ from bottle import Bottle, static_file, template, run
 import os
 import argparse
 
-from thumbnails import generate_thumbnails
+from services.thumbnails import generate_thumbnails
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -70,26 +70,27 @@ def create_app(media_folder, thumb_folder):
                 display_items.append({'type': 'image', 'file': f})
 
         return template('''
-<!DOCTYPE html>
-<html>
-<head>
-    <title>rpi-matrix-control</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-<main class="grid">
-% for item in display_items:
-    <button class="media-item" data-file="{{item['file']}}">
-        % if item['type'] == 'video':
-            <img src="/thumbnails/{{item['thumb']}}">
-        % else:
-            <img src="/media/{{item['file']}}">
-        % end
-    </button>
-% end
-</main>
-</body>
-</html>
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>rpi-matrix-control</title>
+                <link rel="stylesheet" href="/static/style.css">
+                <link rel="icon" type="image/x-icon" href="/static/hoolacane-logo.ico">       
+            </head>
+            <body>
+            <main class="grid">
+            % for item in display_items:
+                <button class="media-item" data-file="{{item['file']}}">
+                    % if item['type'] == 'video':
+                        <img src="/thumbnails/{{item['thumb']}}">
+                    % else:
+                        <img src="/media/{{item['file']}}">
+                    % end
+                </button>
+            % end
+            </main>
+            </body>
+            </html>
         ''', display_items=display_items)
 
     return app
