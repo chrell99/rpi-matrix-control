@@ -1,15 +1,12 @@
+import os
+import json
 from bottle import Bottle, static_file, run, TEMPLATE_PATH
 
-# -----------------------------
-# SET PATHS FIRST (CRITICAL)
-# -----------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 TEMPLATE_PATH.clear()
 TEMPLATE_PATH.append(os.path.join(BASE_DIR, 'templates'))
 
-import os
-import json
 
 from services.thumbnails import generate_thumbnails
 from routes.mediaControl import setup_mediaControl
