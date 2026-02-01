@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title or "RPI Sign Control"}}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<header>
+    <div class="burger-menu">
+        <button id="menu-toggle">☰ Menu</button>
+        <nav id="menu" class="hidden">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/mediaControl">Media Control</a></li>
+                <li><a href="/spectrum">Spectrum Analyzer</a></li>
+                <li><a href="/config">Config</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="content">
+    % block content % % end
+</div>
+
+<script>
+document.getElementById('menu-toggle').onclick = function() {
+    document.getElementById('menu').classList.toggle('hidden');
+};
+</script>
+</body>
+</html>
