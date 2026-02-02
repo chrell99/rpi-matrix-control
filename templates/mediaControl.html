@@ -2,7 +2,7 @@
 
 <main class="grid">
 % for item in display_items:
-    <button class="media-item" data-file="{{item['file']}}">
+    <button class="media-item" onclick="triggerCommand(`{{item['file']}}`)">
         % if item['type'] == 'video':
             <img src="/thumbnails/{{item['thumb']}}">
         % else:
