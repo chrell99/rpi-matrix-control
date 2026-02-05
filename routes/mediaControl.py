@@ -1,6 +1,6 @@
 import os
-import subprocess
 from bottle import template, request
+from services.rpi_led_matrix import start_videoviewer
 
 def setup_mediaControl(app, media_folder, thumb_folder):
     @app.route('/mediaControl')
@@ -29,11 +29,11 @@ def setup_mediaControl(app, media_folder, thumb_folder):
         filename = data.get('file')
         if not filename:
             return "No file specified"
-
-        full_path = os.path.join(media_folder, filename)
+        
+        filename_no_ext, _ = os.path.splitext(filename)
 
         try:
-            #subprocess.Popen(['./bin', full_path], cwd='/home/pi/', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            return f"Started {filename}"
+            start_videoviewer(filename_no_ext)
+            return f"Started {filename_no_ext}"
         except Exception as e:
             return f"Error: {str(e)}"
