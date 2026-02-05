@@ -40,6 +40,11 @@ def create_app(media_folder, thumb_folder):
     @app.route('/thumbnails/<filepath:path>')
     def serve_thumbnails(filepath):
         return static_file(filepath, root=os.path.join(BASE_DIR, '..', 'thumbnails'))
+    
+    # Serve media from /media folder
+    @app.route('/media/<filepath:path>')
+    def serve_media(filepath):
+        return static_file(filepath, root=os.path.join(BASE_DIR, '..', 'media'))
 
     setup_index(app)
 
