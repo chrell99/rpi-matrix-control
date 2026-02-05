@@ -1,7 +1,9 @@
 {
     "media_folder": "/home/hoolacane/media",
     "thumb_folder": "/home/hoolacane/thumbnails",
+    "stream_folder": "/home/hoolacane/streams",
     "host": "0.0.0.0",
     "port": 8080,
-    "generate_thumbs": true
+    "generate_thumbs": true,
+    "rotation": "270"
 }
