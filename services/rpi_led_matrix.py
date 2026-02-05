@@ -38,7 +38,7 @@ def stop_running_process():
     if _last_process is None:
         return
     
-    os.kill(_last_process.pid, signal.SIGKILL)
+    os.kill(_last_process, signal.SIGKILL)
     _last_process = None
 
 
