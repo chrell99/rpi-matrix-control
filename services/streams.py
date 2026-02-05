@@ -37,7 +37,7 @@ def main():
 
         command = [
             "sudo",
-            "./hoolacane-rpi-led-matrix/utils/video-viewer",
+            "/home/hoolacane/hoolacane-rpi-led-matrix/utils/video-viewer",
             "--led-chain=3",
             "--led-parallel=3",
             "--led-slowdown-gpio=2",
@@ -47,7 +47,7 @@ def main():
             str(media_path),
             "-O",
             str(stream_folder / stream_name),
-            f'--led-pixel-mapper="Rotate:{rotation}"'
+            f'--led-pixel-mapper=Rotate:{rotation}'
         ]
 
         print(f"Generating stream for: {filename}")
