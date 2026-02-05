@@ -30,6 +30,7 @@ def main():
     }
 
     for filename, media_path in sorted(media_files.items()):
+        stream_name = f"{filename}.stream"
 
         if filename in stream_files:
             continue
