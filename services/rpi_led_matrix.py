@@ -28,7 +28,7 @@ def start_videoviewer(filename):
         str(stream_folder / stream_name),
     ]
 
-    process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+    process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     print(f"Started process with PID {process.pid}")
     _last_process = process
