@@ -111,10 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const stopBtn = document.getElementById('stop-btn');
     stopBtn.addEventListener('click', () => {
-        fetch('/stop_media', { method: 'POST' })
-            .then(res => res.text())
-            .then(msg => alert(msg))
-            .catch(err => alert("Error stopping process: " + err));
+        fetch('/stop_media', { method: 'POST' });
     });
 });
 </script>
