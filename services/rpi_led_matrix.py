@@ -31,16 +31,23 @@ def start_videoviewer(filename):
     process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
 
     print(f"Started process with PID {process.pid}")
-    _last_process = process.pid
+    _last_process = process
 
 def stop_running_process():
     global _last_process
     if _last_process is None:
         return
-    
-    os.kill(_last_process, signal.SIGKILL)
-    _last_process = None
 
+    # Terminate politely first
+    if _last_process.poll() is None:  # still running
+        _last_process.terminate()
+        try:
+            _last_process.wait(timeout=5)  # wait up to 5 seconds
+        except subprocess.TimeoutExpired:
+            _last_process.kill()           # force kill if needed
+            _last_process.wait()           # reap it
+
+    _last_process = None
 
 
 
