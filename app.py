@@ -9,6 +9,7 @@ TEMPLATE_PATH.append(os.path.join(BASE_DIR, 'templates'))
 
 
 from services.thumbnails import generate_thumbnails
+from services.rpi_led_matrix import stop_running_process
 from routes.mediaControl import setup_mediaControl
 from routes.index import setup_index
 
@@ -45,6 +46,10 @@ def create_app(media_folder, thumb_folder):
     @app.route('/media/<filepath:path>')
     def serve_media(filepath):
         return static_file(filepath, root=os.path.join(BASE_DIR, '..', 'media'))
+    
+    @app.post('/stop_media')
+    def stop_media():
+        stop_running_process()
 
     setup_index(app)
 

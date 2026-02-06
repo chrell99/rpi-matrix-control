@@ -18,6 +18,8 @@
             </ul>
         </nav>
     </div>
+
+    <button id="stop-btn">STOP</button>
 </header>
 
 <div class="content">
@@ -25,12 +27,50 @@
 </div>
 <style>
     header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
         display: flex;
         align-items: center;
         justify-content: space-between;
         background: #333;
         color: white;
         padding: 10px 20px;
+    }
+
+    nav {
+        display: none;
+        background: #444;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        flex-direction: column;
+        min-width: 150px;
+        border-radius: 0 0 4px 4px;
+        overflow: hidden;
+    }
+
+    nav.show {
+        display: flex;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        display: block;
+    }
+
+    #stop-btn {
+        background: red;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 4px;
+        margin-left: 20px;
     }
 
     #menu-btn {
@@ -67,6 +107,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     btn.addEventListener('click', () => {
         menu.classList.toggle('show');
+    });
+
+    const stopBtn = document.getElementById('stop-btn');
+    stopBtn.addEventListener('click', () => {
+        fetch('/stop_media', { method: 'POST' })
+            .then(res => res.text())
+            .then(msg => alert(msg))
+            .catch(err => alert("Error stopping process: " + err));
     });
 });
 </script>
