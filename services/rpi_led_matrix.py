@@ -57,9 +57,9 @@ def start_strobe(on_time, off_time, brightness):
     cmd = [
         "sudo",
         "/home/hoolacane/hoolacane-rpi-led-matrix/music-synced/strobe",
-        on_time,
-        off_time,
-        brightness,
+        str(on_time),
+        str(off_time),
+        str(brightness),
     ]
 
     process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
