@@ -49,7 +49,7 @@ def stop_running_process():
 
     _last_process = None
 
-def start_strobe(onTime, offTime, brightness):
+def start_strobe(on_time, off_time, brightness):
     global _last_process
 
     stop_running_process()
@@ -57,8 +57,8 @@ def start_strobe(onTime, offTime, brightness):
     cmd = [
         "sudo",
         "/home/hoolacane/hoolacane-rpi-led-matrix/music-synced/strobe",
-        onTime,
-        offTime,
+        on_time,
+        off_time,
         brightness,
     ]
 
