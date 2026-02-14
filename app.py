@@ -12,6 +12,7 @@ from services.thumbnails import generate_thumbnails
 from services.rpi_led_matrix import stop_running_process
 from routes.mediaControl import setup_mediaControl
 from routes.index import setup_index
+from routes.strobe import setup_strobe
 
 CONFIG_FILE = 'config.json'
 
@@ -54,6 +55,8 @@ def create_app(media_folder, thumb_folder):
     setup_index(app)
 
     setup_mediaControl(app, media_folder, thumb_folder)
+
+    setup_strobe(app)
 
     return app
 

@@ -1,0 +1,119 @@
+% rebase('base.html', title="Strobe Control")
+
+<div class="strobe-container">
+    <h2>Strobe Settings</h2>
+
+    <div class="control-group">
+        <label for="onTime">On Time (ms)</label>
+        <input type="number" id="onTime" value="100" min="1">
+    </div>
+
+    <div class="control-group">
+        <label for="offTime">Off Time (ms)</label>
+        <input type="number" id="offTime" value="100" min="1">
+    </div>
+
+    <div class="control-group">
+        <label for="brightness">
+            Brightness: <span id="brightnessValue">50</span>%
+        </label>
+        <input type="range" id="brightness" min="0" max="100" value="50">
+    </div>
+
+    <button class="strobe-btn" onclick="sendStrobe()">Start Strobe</button>
+</div>
+
+<script>
+function sendStrobe() {
+    const settings = {
+        on_time: Number(document.getElementById('onTime').value),
+        off_time: Number(document.getElementById('offTime').value),
+        brightness: Number(document.getElementById('brightness').value)
+    };
+
+    triggerCommand(settings);
+}
+
+// Live brightness display
+document.getElementById('brightness').addEventListener('input', e => {
+    document.getElementById('brightnessValue').textContent = e.target.value;
+});
+
+function triggerCommand(settings) {
+    fetch('/run-strobe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settings)
+    })
+    .then(response => response.text())
+    .then(data => console.log("Strobe triggered:", data))
+    .catch(err => console.error(err));
+}
+</script>
+
+<style>
+.strobe-container {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #333;
+    color: white;
+    border-radius: 10px;
+}
+
+.strobe-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.control-group input[type="number"],
+.control-group input[type="range"] {
+    width: 100%;
+}
+
+.control-group input[type="number"] {
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 6px;
+    border: none;
+}
+
+.strobe-btn {
+    width: 100%;
+    padding: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.strobe-btn:hover {
+    background: #cc0000;
+}
+
+/* 📱 Mobile tweaks */
+@media (max-width: 600px) {
+    .strobe-container {
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .strobe-btn {
+        padding: 24px;
+        font-size: 20px;
+    }
+}
+</style>
