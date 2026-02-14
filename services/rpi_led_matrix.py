@@ -49,5 +49,21 @@ def stop_running_process():
 
     _last_process = None
 
+def start_strobe(onTime, offTime, brightness):
+    global _last_process
 
+    stop_running_process()
+
+    cmd = [
+        "sudo",
+        "/home/hoolacane/hoolacane-rpi-led-matrix/music-synced/strobe",
+        onTime,
+        offTime,
+        brightness,
+    ]
+
+    process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    print(f"Started process with PID {process.pid}")
+    _last_process = process
 

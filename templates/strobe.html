@@ -17,7 +17,7 @@
         <label for="brightness">
             Brightness: <span id="brightnessValue">50</span>%
         </label>
-        <input type="range" id="brightness" min="0" max="100" value="50">
+        <input type="range" id="brightness" min="0" max="80" value="50">
     </div>
 
     <button class="strobe-btn" onclick="sendStrobe()">Start Strobe</button>
@@ -68,6 +68,8 @@ function triggerCommand(settings) {
 
 .control-group {
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .control-group label {
@@ -86,6 +88,9 @@ function triggerCommand(settings) {
     font-size: 18px;
     border-radius: 6px;
     border: none;
+    display: flex;
+    align-self: center;
+    box-sizing: border-box;
 }
 
 .strobe-btn {
