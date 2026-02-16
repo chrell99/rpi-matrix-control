@@ -2,6 +2,9 @@ import os
 import json
 from bottle import Bottle, static_file, run, TEMPLATE_PATH
 
+# Pin process to CPU core 0 (cores are zero-indexed)
+os.sched_setaffinity(0, {0})
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 TEMPLATE_PATH.clear()
