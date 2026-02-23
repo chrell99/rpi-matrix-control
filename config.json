@@ -1,7 +1,7 @@
 {
-    "media_folder": "/home/cmg/media",
-    "thumb_folder": "/home/cmg/thumbnails",
-    "stream_folder": "/home/cmg/streams",
+    "media_folder": "/home/hoolacane/media",
+    "thumb_folder": "/home/hoolacane/thumbnails",
+    "stream_folder": "/home/hoolacane/streams",
     "host": "0.0.0.0",
     "port": 8080,
     "generate_thumbs": true,
