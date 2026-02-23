@@ -15,18 +15,32 @@ def start_videoviewer(filename):
 
     config = load_config()
     stream_folder = Path(config["stream_folder"])
+    media_folder = Path(config["media_folder"])
+    rotation = config.get("rotation", 0)
 
-    stream_name = f"{filename}.stream"
+    if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+        cmd = [
+            "sudo",
+            "/home/hoolacane/hoolacane-rpi-led-matrix/utils/led-image-viewer",
+            "--led-chain=3",
+            "--led-parallel=3",
+            "--led-slowdown-gpio=2",
+            "--led-multiplexing=1",
+            f'--led-pixel-mapper=Rotate:{rotation}',
+            str(media_folder / filename)
+        ]
+    else:
+        stream_name = f"{os.path.splitext(filename)[0]}.stream"
 
-    cmd = [
-        "sudo",
-        "/home/hoolacane/hoolacane-rpi-led-matrix/utils/led-image-viewer",
-        "--led-chain=3",
-        "--led-parallel=3",
-        "--led-slowdown-gpio=2",
-        "--led-multiplexing=1",
-        str(stream_folder / stream_name),
-    ]
+        cmd = [
+            "sudo",
+            "/home/hoolacane/hoolacane-rpi-led-matrix/utils/led-image-viewer",
+            "--led-chain=3",
+            "--led-parallel=3",
+            "--led-slowdown-gpio=2",
+            "--led-multiplexing=1",
+            str(stream_folder / stream_name),
+        ]
 
     process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 

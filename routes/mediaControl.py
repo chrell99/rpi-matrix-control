@@ -29,11 +29,9 @@ def setup_mediaControl(app, media_folder, thumb_folder):
         filename = data.get('file')
         if not filename:
             return "No file specified"
-        
-        filename_no_ext, _ = os.path.splitext(filename)
 
         try:
-            start_videoviewer(filename_no_ext)
-            return f"Started {filename_no_ext}"
+            start_videoviewer(filename)
+            return f"Started {filename}"
         except Exception as e:
             return f"Error: {str(e)}"
