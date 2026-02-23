@@ -8,7 +8,7 @@
 </head>
 <body>
 <header>
-    <div class="burger-menu">
+    <div class="burger-menu menu-wrapper">
         <button id="menu-btn">&#9776;</button>
         <nav id="menu" class="hidden">
             <ul>
@@ -46,6 +46,10 @@
         min-width: 150px;
         border-radius: 5px;
         overflow: hidden;
+        position: absolute;
+        background: #333;
+        border: 5px #555;
+        border-style: solid;
     }
 
     nav.show {
