@@ -1,0 +1,247 @@
+% rebase('base.html', title="Media Upload")
+
+<div class="grid">
+    <div class="upload-card">
+        <h2>Select Media</h2>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+            <label class="file-btn">
+                Choose File
+                <input
+                    type="file"
+                    name="upload"
+                    accept="video/mp4,video/webm,image/gif,image/jpeg,image/png,image/heic"
+                    required
+                    onchange="updateFilename(this)"
+                >
+            </label>
+
+            <div class="filename" id="filename">
+                No file selected
+            </div>
+
+            <button class="home-btn upload-btn" type="submit">
+                Upload
+            </button>
+        </form>
+
+        <div id="uploadStatus" class="upload-status">
+            <div id="spinner" class="spinner"></div>
+            <div id="check" class="checkmark">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="36" height="36">
+                    <circle cx="26" cy="26" r="25" fill="none" stroke="#4caf50" stroke-width="4"/>
+                    <path fill="none" stroke="#4caf50" stroke-width="4" d="M14 27 l10 10 l14 -18"/>
+                </svg>
+            </div>
+            <div id="statusText"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateFilename(input) {
+    const label = document.getElementById("filename");
+    if (input.files.length > 0) {
+        label.textContent = input.files[0].name;
+    } else {
+        label.textContent = "No file selected";
+    }
+}
+
+const form = document.getElementById("uploadForm");
+form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const fileInput = form.querySelector("input[name='upload']");
+    if (!fileInput.files.length) {
+        alert("Please select a file!");
+        return;
+    }
+
+    const spinner = document.getElementById("spinner");
+    const check = document.getElementById("check");
+    const statusText = document.getElementById("statusText");
+
+    spinner.style.display = "block";
+    check.style.display = "none";
+    statusText.textContent = "";
+
+    const formData = new FormData();
+    formData.append("upload", fileInput.files[0]);
+
+    try {
+        const response = await fetch("/upload", {
+            method: "POST",
+            body: formData
+        });
+
+        const text = await response.text();
+        console.log(text);
+        spinner.style.display = "none";
+
+        if (text.toLowerCase().includes("uploaded")) {
+            check.style.display = "block";
+            statusText.textContent = text;
+
+            // Hide checkmark after 2 seconds
+            setTimeout(() => {
+                check.style.display = "none";
+                statusText.textContent = "";
+            }, 2000);
+        } else {
+            // Error response from server
+            statusText.textContent = text;
+            statusText.style.color = "red";
+        }
+    } catch (err) {
+        console.error("Upload failed", err);
+        spinner.style.display = "none";
+        statusText.textContent = "Upload failed!";
+        statusText.style.color = "red";
+    }
+});
+</script>
+
+<style>
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 30px;
+}
+
+.upload-card {
+    background: #2f2f2f;
+    border-radius: 8px;
+    padding: 30px 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+    text-align: center;
+}
+
+.upload-card h2 {
+    margin-bottom: 25px;
+    color: #fff;
+    font-size: 24px;
+}
+
+.file-btn {
+    display: block;
+    background: #444;
+    color: white;
+    border-radius: 6px;
+    padding: 24px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.file-btn:hover {
+    background: #555;
+    transform: translateY(-2px);
+}
+
+.file-btn input {
+    display: none;
+}
+
+.filename {
+    color: #bbb;
+    font-size: 14px;
+    margin-bottom: 25px;
+    word-break: break-all;
+}
+
+.home-btn {
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 24px 20px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.home-btn:hover {
+    background: #555;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+.home-btn:active {
+    background: #333;
+    transform: translateY(0);
+}
+
+.spinner {
+    border: 4px solid #333;
+    border-top: 4px solid #fff;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 1s linear infinite;
+    display: none;
+    margin: 10px auto;
+}
+
+/* Checkmark */
+.checkmark {
+    display: none;
+    color: #4caf50;
+    font-size: 36px;
+    text-align: center;
+    margin: 10px auto;
+    animation: fadeInOut 2s forwards;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.upload-status {
+    margin-top: 15px;
+    color: #ccc;
+    text-align: center;
+}
+
+.upload-status #statusText {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+@media (max-width: 600px) {
+    .grid {
+        padding: 15px;
+    }
+
+    .upload-card {
+        padding: 25px 20px;
+        border-radius: 10px;
+    }
+
+    .file-btn {
+        font-size: 18px;
+        padding: 22px 16px;
+        border-radius: 10px;
+    }
+
+    .home-btn {
+        font-size: 20px;
+        padding: 22px 16px;
+        border-radius: 10px;
+    }
+}
+</style>

@@ -16,6 +16,7 @@ from services.rpi_led_matrix import stop_running_process
 from routes.mediaControl import setup_mediaControl
 from routes.index import setup_index
 from routes.strobe import setup_strobe
+from routes.mediaUpload import setup_mediaUpload
 
 CONFIG_FILE = 'config.json'
 
@@ -60,6 +61,8 @@ def create_app(media_folder, thumb_folder):
     setup_mediaControl(app, media_folder, thumb_folder)
 
     setup_strobe(app)
+
+    setup_mediaUpload(app, media_folder)
 
     return app
 
