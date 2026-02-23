@@ -1,7 +1,9 @@
 from bottle import Bottle, request, run, template
 import os
+from services.thumbnails import generate_thumbnails
+from services.streams import generate_streams
 
-def setup_mediaUpload(app, media_folder):
+def setup_mediaUpload(app, media_folder, thumb_folder):
 
     os.makedirs(media_folder, exist_ok=True)
 
@@ -30,5 +32,9 @@ def setup_mediaUpload(app, media_folder):
         save_path = os.path.join(media_folder, filename)
 
         upload.save(save_path, overwrite=True)
+
+        generate_thumbnails(media_folder, thumb_folder)
+
+        generate_streams()
 
         return f"Uploaded {filename}"

@@ -62,7 +62,7 @@ def create_app(media_folder, thumb_folder):
 
     setup_strobe(app)
 
-    setup_mediaUpload(app, media_folder)
+    setup_mediaUpload(app, media_folder, thumb_folder)
 
     return app
 

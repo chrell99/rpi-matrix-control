@@ -8,7 +8,7 @@ def load_config(path="config.json"):
     with open(path, "r") as f:
         return json.load(f)
 
-def main():
+def generate_streams():
     config = load_config()
 
     media_folder = Path(config["media_folder"])
@@ -54,4 +54,4 @@ def main():
         subprocess.run(command, check=True)
 
 if __name__ == "__main__":
-    main()
+    generate_streams()
