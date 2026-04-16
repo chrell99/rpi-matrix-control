@@ -8,32 +8,14 @@ def load_config(path="config.json"):
     with open(path, "r") as f:
         return json.load(f)
 
-def generate_streams():
+def generate_streams(media_path: Path):
     config = load_config()
-
-    media_folder = Path(config["media_folder"])
     stream_folder = Path(config["stream_folder"])
     rotation = config.get("rotation", 0)
 
-    # Collect media files
-    media_files = {
-        file.stem: file
-        for file in media_folder.iterdir()
-        if file.is_file() and file.suffix.lower() in MEDIA_EXTENSIONS
-    }
-
-    # Collect existing .stream files
-    stream_files = {
-        file.stem
-        for file in stream_folder.iterdir()
-        if file.is_file() and file.suffix == ".stream"
-    }
-
-    for filename, media_path in sorted(media_files.items()):
-        stream_name = f"{filename}.stream"
-
-        if filename in stream_files:
-            continue
+    for brightness in range(10, 110, 10):
+        stream_name = f"{media_path.stem}.stream"
+        output_path = stream_folder / str(brightness) / stream_name
 
         command = [
             "sudo",
@@ -44,14 +26,47 @@ def generate_streams():
             "--led-multiplexing=1",
             "-T4",
             "--led-pwm-bits=8",
+            f"--led-brightness={brightness}",
             str(media_path),
             "-O",
-            str(stream_folder / stream_name),
-            f'--led-pixel-mapper=Rotate:{rotation}'
+            str(output_path),
+            f"--led-pixel-mapper=Rotate:{rotation}",
         ]
 
-        print(f"Generating stream for: {filename}")
+        print(f"Generating stream for: {media_path.name} at brightness {brightness}")
         subprocess.run(command, check=True)
 
+def get_missing_media(config) -> list[Path]:
+    media_folder = Path(config["media_folder"])
+    stream_folder = Path(config["stream_folder"])
+
+    media_files = {
+        file.stem: file
+        for file in media_folder.iterdir()
+        if file.is_file() and file.suffix.lower() in MEDIA_EXTENSIONS
+    }
+
+    missing = []
+    for stem, media_path in sorted(media_files.items()):
+        stream_name = f"{stem}.stream"
+        # A file is fully compiled only if ALL brightness levels exist
+        all_exist = all(
+            (stream_folder / str(brightness) / stream_name).exists()
+            for brightness in range(10, 110, 10)
+        )
+        if not all_exist:
+            missing.append(media_path)
+
+    return missing
+
 if __name__ == "__main__":
-    generate_streams()
+    config = load_config()
+    missing_files = get_missing_media(config)
+
+    if not missing_files:
+        print("All media files have been compiled.")
+    else:
+        print(f"Found {len(missing_files)} media file(s) to compile:")
+        for path in missing_files:
+            print(f"  - {path.name}")
+            generate_streams(path)
