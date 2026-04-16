@@ -1,7 +1,7 @@
 import json
 import subprocess, os, signal
 from pathlib import Path
-from settings import get_setting
+from services.settings import get_setting
 
 _last_process = None
 
