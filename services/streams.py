@@ -17,6 +17,8 @@ def generate_streams(media_path: Path):
         stream_name = f"{media_path.stem}.stream"
         output_path = stream_folder / str(brightness) / stream_name
 
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
         command = [
             "sudo",
             "/home/hoolacane/hoolacane-rpi-led-matrix/utils/video-viewer",
