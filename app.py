@@ -1,6 +1,6 @@
 import os
 import json
-from bottle import Bottle, static_file, run, TEMPLATE_PATH
+from bottle import Bottle, request, static_file, run, TEMPLATE_PATH
 
 # Pin process to CPU core 0 (cores are zero-indexed)
 os.sched_setaffinity(0, {0})
@@ -10,9 +10,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_PATH.clear()
 TEMPLATE_PATH.append(os.path.join(BASE_DIR, 'templates'))
 
+BRIGHTNESS = 100
 
 from services.thumbnails import generate_thumbnails
 from services.rpi_led_matrix import stop_running_process
+from services.settings import get_setting, update_setting
 from routes.mediaControl import setup_mediaControl
 from routes.index import setup_index
 from routes.strobe import setup_strobe
@@ -55,6 +57,18 @@ def create_app(media_folder, thumb_folder):
     @app.post('/stop_media')
     def stop_media():
         stop_running_process()
+
+    @app.post('/set_brightness')
+    def set_brightness():
+        print(request.json)
+        data = request.json
+        new_level = data.get('brightness')
+
+        if new_level is not None:
+            update_setting("brightness", new_level)
+            return {"status": "success", "value": new_level}
+        else:
+            return {"status": "error", "message": "Invalid data"}
 
     setup_index(app)
 

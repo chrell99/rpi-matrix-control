@@ -1,6 +1,7 @@
 import json
 import subprocess, os, signal
 from pathlib import Path
+from settings import get_setting
 
 _last_process = None
 
@@ -17,6 +18,7 @@ def start_videoviewer(filename):
     stream_folder = Path(config["stream_folder"])
     media_folder = Path(config["media_folder"])
     rotation = config.get("rotation", 0)
+    brightness = get_setting("brightness")
 
     if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
         cmd = [
@@ -26,6 +28,7 @@ def start_videoviewer(filename):
             "--led-parallel=3",
             "--led-slowdown-gpio=2",
             "--led-multiplexing=1",
+            f'--led-brightness={brightness}'
             f'--led-pixel-mapper=Rotate:{rotation}',
             str(media_folder / filename)
         ]
@@ -39,7 +42,7 @@ def start_videoviewer(filename):
             "--led-parallel=3",
             "--led-slowdown-gpio=2",
             "--led-multiplexing=1",
-            str(stream_folder / stream_name),
+            str(stream_folder / brightness / stream_name),
         ]
 
     process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

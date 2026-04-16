@@ -34,8 +34,8 @@ def setup_mediaUpload(app, media_folder, thumb_folder):
 
         upload.save(save_path, overwrite=True)
 
-        generate_thumbnails(media_folder, thumb_folder)
-
-        generate_streams(Path(save_path))
+        if ext in {'.mp4', '.webm', '.gif'}:
+            generate_thumbnails(media_folder, thumb_folder)
+            generate_streams(Path(save_path))
 
         return f"Uploaded {filename}"

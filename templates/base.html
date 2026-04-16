@@ -18,10 +18,14 @@
             </ul>
             <ul>
                 <li><a href="/strobe">Strobe</a></li>
+                li><a href="/mediaUpload">Upload media</a></li>
             </ul>
         </nav>
     </div>
-
+    <div class="brightness-wrapper">
+        <label for="brightness-slider" id="brightness-label">100%</label>
+        <input type="range" id="brightness-slider" min="10" max="100" step="10" value="100">
+    </div>
     <button id="stop-btn">STOP</button>
 </header>
 
@@ -100,6 +104,23 @@
         text-decoration: none;
         padding: 10px;
     }
+    .brightness-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        margin-right: 12px;
+    }
+    #brightness-label {
+        color: white;
+        font-size: 14px;
+        min-width: 36px;
+        text-align: right;
+    }
+    #brightness-slider {
+        width: 120px;
+        cursor: pointer;
+    }
 </style>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -113,6 +134,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const stopBtn = document.getElementById('stop-btn');
     stopBtn.addEventListener('click', () => {
         fetch('/stop_media', { method: 'POST' });
+    });
+
+    const slider = document.getElementById('brightness-slider');
+    const label = document.getElementById('brightness-label');
+
+    slider.addEventListener('input', () => {
+        label.textContent = `${slider.value}%`;
+    });
+
+    slider.addEventListener('change', () => {
+        fetch('/set_brightness', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ brightness: parseInt(slider.value) })
+        });
     });
 });
 </script>
