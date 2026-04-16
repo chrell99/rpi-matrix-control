@@ -28,7 +28,7 @@ def start_videoviewer(filename):
             "--led-parallel=3",
             "--led-slowdown-gpio=2",
             "--led-multiplexing=1",
-            f'--led-brightness={brightness}'
+            f'--led-brightness={brightness}',
             f'--led-pixel-mapper=Rotate:{rotation}',
             str(media_folder / filename)
         ]
@@ -42,7 +42,7 @@ def start_videoviewer(filename):
             "--led-parallel=3",
             "--led-slowdown-gpio=2",
             "--led-multiplexing=1",
-            str(stream_folder / brightness / stream_name),
+            str(stream_folder / str(brightness) / stream_name),
         ]
 
     process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
