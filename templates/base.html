@@ -24,7 +24,7 @@
     </div>
     <div class="brightness-wrapper">
         <span class="slider-title">Brightness:</span> <label for="brightness-slider" id="brightness-label">100%</label>
-        <input type="range" id="brightness-slider" min="10" max="100" step="10" value="100">
+        <input type="range" id="brightness-slider" min="10" max="100" step="10">
     </div>
     <button id="stop-btn">STOP</button>
 </header>
@@ -147,6 +147,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const label = document.getElementById('brightness-label');
 
     const initializeSlider = () => {
+        const savedValue = localStorage.getItem('sliderValue');
+        if (savedValue) {
+            slider.value = savedValue;
+        }
         label.textContent = `${slider.value}%`;
     };
     initializeSlider();
@@ -156,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     slider.addEventListener('change', () => {
+        localStorage.setItem('sliderValue', parseInt(slider.value));
         fetch('/set_brightness', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
