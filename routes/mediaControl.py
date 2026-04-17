@@ -5,10 +5,10 @@ from services.rpi_led_matrix import start_videoviewer
 def setup_mediaControl(app, media_folder, thumb_folder):
     @app.route('/mediaControl')
     def mediaControl():
-        media_files = [
+        media_files = sorted([
             f for f in os.listdir(media_folder)
             if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.mp4', '.webm'))
-        ]
+        ])
 
         display_items = []
         for f in media_files:

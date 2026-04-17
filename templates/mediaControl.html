@@ -8,9 +8,32 @@
         % else:
             <img src="/media/{{item['file']}}">
         % end
+        <span class="filename-banner">{{item['file']}}</span>
     </button>
 % end
 </main>
+
+<style>
+.media-item {
+	position: relative;
+	overflow: hidden;
+}
+
+.filename-banner {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.6);
+	color: white;
+	padding: 8px;
+	font-size: 12px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-weight: 500;
+}
+</style>
 
 <script>
 function triggerCommand(filename) {
