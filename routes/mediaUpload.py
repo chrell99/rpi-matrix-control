@@ -10,7 +10,11 @@ def setup_mediaUpload(app, media_folder, thumb_folder):
 
     @app.route('/mediaUpload')
     def media_upload():
-        return template('mediaUpload.html')
+        existing_files = [
+            f.lower() for f in os.listdir(media_folder)
+            if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.mp4', '.webm'))
+        ]
+        return template('mediaUpload.html',  existing_files=existing_files)
 
 
     @app.post("/upload")
