@@ -2,12 +2,9 @@ import json
 import subprocess, os, signal
 from pathlib import Path
 from services.settings import get_setting
+from services.configs import load_config
 
 _last_process = None
-
-def load_config(path="config.json"):
-    with open(path, "r") as f:
-        return json.load(f)
 
 def start_videoviewer(filename):
     global _last_process
