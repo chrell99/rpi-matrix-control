@@ -1,14 +1,42 @@
 import json
 import subprocess
 from pathlib import Path
+import threading
+import queue
+from services.configs import load_config
+
+# Global job queue
+job_queue = queue.Queue()
+processing = False
 
 MEDIA_EXTENSIONS = {".webm", ".mp4", ".gif", ".jpeg", ".png"}
 
-def load_config(path="config.json"):
-    with open(path, "r") as f:
-        return json.load(f)
+def start_background_processor():
+    """Start the background worker thread once at startup"""
+    global processing
+    if not processing:
+        processing = True
+        thread = threading.Thread(target=_process_jobs, daemon=True)
+        thread.start()
+
+def _process_jobs():
+    """Worker loop: processes one job at a time"""
+    while True:
+        media_path = job_queue.get()
+        try:
+            _generate_streams_worker(media_path)
+            print(f"✓ Finished processing {media_path.name}")
+        except Exception as e:
+            print(f"✗ Error processing {media_path.name}: {e}")
+        finally:
+            job_queue.task_done()
 
 def generate_streams(media_path: Path):
+    """Queue the job (returns immediately)"""
+    print(f"Queued: {media_path.name}")
+    job_queue.put(media_path)
+
+def _generate_streams_worker(media_path: Path):
     config = load_config()
     stream_folder = Path(config["stream_folder"])
     rotation = config.get("rotation", 0)

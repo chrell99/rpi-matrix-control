@@ -16,6 +16,7 @@ from services.thumbnails import generate_thumbnails
 from services.rpi_led_matrix import stop_running_process
 from services.settings import update_setting
 from services.configs import load_config
+from services.streams import start_background_processor
 from routes.mediaControl import setup_mediaControl
 from routes.index import setup_index
 from routes.strobe import setup_strobe
@@ -69,6 +70,7 @@ def create_app(media_folder, thumb_folder, stream_folder):
 
 if __name__ == "__main__":
     config = load_config()
+    start_background_processor()
 
     if config.get("generate_thumbs"):
         generate_thumbnails(config["media_folder"], config["thumb_folder"])
