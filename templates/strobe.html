@@ -20,7 +20,7 @@
         <input type="range" id="brightness" min="0" max="80" value="50">
     </div>
 
-    <button class="strobe-btn" onclick="sendStrobe()">Start Strobe</button>
+    <button class="action-btn" style="width: 100%; font-size: 22px;" onclick="sendStrobe()">Start Strobe</button>
 </div>
 
 <script>
@@ -91,22 +91,6 @@ function triggerCommand(settings) {
     display: flex;
     align-self: center;
     box-sizing: border-box;
-}
-
-.strobe-btn {
-    width: 100%;
-    padding: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    background: red;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.strobe-btn:hover {
-    background: #cc0000;
 }
 
 /* 📱 Mobile tweaks */

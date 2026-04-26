@@ -16,7 +16,7 @@ def _load_all():
         except json.JSONDecodeError:
             print("error while json decoding the settings file")
 
-def update_setting(key, value):
+def set_setting(key, value):
     with file_lock:
         data = _load_all()
         data[key] = value

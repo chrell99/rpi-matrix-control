@@ -13,8 +13,8 @@ TEMPLATE_PATH.append(os.path.join(BASE_DIR, 'templates'))
 BRIGHTNESS = 100
 
 from services.thumbnails import generate_thumbnails
-from services.rpi_led_matrix import stop_running_process
-from services.settings import update_setting
+from services.rpi_led_matrix import stop_running_process, start_strobe
+from services.settings import set_setting, get_setting
 from services.configs import load_config
 from services.streams import start_background_processor
 from routes.mediaControl import setup_mediaControl
@@ -53,10 +53,18 @@ def create_app(media_folder, thumb_folder, stream_folder):
         new_level = data.get('brightness')
 
         if new_level is not None:
-            update_setting("brightness", new_level)
+            set_setting("brightness", new_level)
             return {"status": "success", "value": new_level}
         else:
             return {"status": "error", "message": "Invalid data"}
+        
+    @app.post('/default_strobe')
+    def default_strobe():
+        on_time = get_setting("strobe_settings.on_time_ms")
+        off_time = get_setting("strobe_settings.off_time_ms")
+        brightness = get_setting("strobe_settings.brightness")
+
+        start_strobe(on_time, off_time, brightness)
 
     setup_index(app)
 

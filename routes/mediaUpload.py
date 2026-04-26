@@ -32,7 +32,7 @@ def setup_mediaUpload(app, media_folder, thumb_folder):
             return "File type not allowed (extension)"
 
         if mime not in {'video/mp4','video/webm','image/gif','image/jpeg','image/png','image/heic','image/heif'}:
-            return "File type not allowed (MIME)"
+            return f"File type not allowed (MIME) your type was: {mime}"
         
         save_path = os.path.join(media_folder, filename)
 

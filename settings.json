@@ -1,5 +1,5 @@
 {
-    "brightness": 10,
+    "brightness": 100,
     "names": [
         "MCTung",
         "Theis",
@@ -13,5 +13,13 @@
         "Martin C",
         "Burger King aka Gorm",
         "Nicki"
-    ]
+    ],
+    "strobe_settings": {
+        "brightness": 100,
+        "off_time_ms": 100,
+        "on_time_ms": 10
+    },
+    "strobe_settings.on_time_ms": 120,
+    "strobe_settings.off_time_ms": 100,
+    "strobe_settings.brightness": 50
 }
