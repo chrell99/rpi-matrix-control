@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const strobeBtn = document.getElementById('strobe-btn');
-    stopBtn.addEventListener('click', () => {
+    strobeBtn.addEventListener('click', () => {
         fetch('/default_strobe', { method: 'POST' });
     });
 
