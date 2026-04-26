@@ -1,0 +1,83 @@
+% rebase('base.html', title="Config")
+
+<div class="settings-container">
+    <h2>System settings</h2>
+    
+    <form action="/settings/update" method="post" class="settings-form">
+        % for key, value in settings.items():
+            <div class="setting-group">
+                <label for="{{key}}">{{key.replace('_', ' ').upper()}}</label>
+                
+                % if isinstance(value, list):
+                    <input type="text" name="{{key}}" value="{{', '.join(value)}}" placeholder="item1, item2, item3">
+                    <small>List of values (comma-separated)</small>
+                % elif isinstance(value, bool):
+                    <input type="checkbox" name="{{key}}" {{'checked' if value else ''}} class="toggle-switch">
+                % else:
+                    <input type="text" name="{{key}}" value="{{value}}">
+                % end
+            </div>
+        % end
+        
+        <div class="form-actions">
+            <button type="submit" class="action-btn" style="background: #4CAF50;">SAVE SETTINGS</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .settings-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #222;
+        border-radius: 8px;
+        color: white;
+    }
+
+    .settings-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .setting-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #444;
+    }
+
+    .setting-group label {
+        font-weight: bold;
+        color: #ccc;
+        font-size: 0.9rem;
+    }
+
+    .setting-group input[type="text"] {
+        background: #333;
+        border: 1px solid #555;
+        color: white;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .setting-group small {
+        color: #888;
+        font-style: italic;
+    }
+
+    .form-actions {
+        margin-top: 10px;
+        text-align: right;
+    }
+
+    /* Checkbox styling if you have booleans */
+    .toggle-switch {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+</style>

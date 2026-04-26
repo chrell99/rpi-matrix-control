@@ -21,6 +21,7 @@ from routes.mediaControl import setup_mediaControl
 from routes.index import setup_index
 from routes.strobe import setup_strobe
 from routes.mediaUpload import setup_mediaUpload
+from routes.settings import setup_settings
 
 CONFIG_FILE = 'config.json'
 
@@ -73,6 +74,8 @@ def create_app(media_folder, thumb_folder, stream_folder):
     setup_strobe(app)
 
     setup_mediaUpload(app, media_folder, thumb_folder)
+
+    setup_settings(app)
 
     return app
 

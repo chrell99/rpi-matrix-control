@@ -10,11 +10,12 @@ def _load_all():
     if not os.path.exists(SETTINGS_FILE):
         print("Could not find the file settings.json")
     
-    with open(SETTINGS_FILE, 'r') as f:
+    with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
         try:
             return json.load(f)
         except json.JSONDecodeError:
             print("error while json decoding the settings file")
+            return {}
 
 def set_setting(key, value):
     with file_lock:
@@ -22,8 +23,8 @@ def set_setting(key, value):
         data[key] = value
         
         temp_file = SETTINGS_FILE + ".tmp"
-        with open(temp_file, 'w') as f:
-            json.dump(data, f, indent=4)
+        with open(temp_file, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
         
         os.replace(temp_file, SETTINGS_FILE)
 
