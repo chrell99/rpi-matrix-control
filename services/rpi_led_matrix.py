@@ -81,3 +81,56 @@ def start_strobe(on_time, off_time, brightness):
     print(f"Started process with PID {process.pid}")
     _last_process = process
 
+def start_strobe_to_beat():
+    global _last_process
+
+    stop_running_process()
+
+    brightness = get_setting("brightness")
+    sensitivity = get_setting("strobe_to_beat_sensitivity")
+    window = get_setting("strobe_to_beat_window")
+
+    cmd = [
+        "sudo",
+        "/home/hoolacane/hoolacane-rpi-led-matrix/music-synced/strobe-to-freq",
+        f'--brightness={brightness}',
+        f'--sensitivity={sensitivity}',
+        f'--window={window}'
+    ]
+
+    process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    print(f"Started process with PID {process.pid}")
+    _last_process = process
+
+def start_spectrum_visualizer():
+    global _last_process
+
+    stop_running_process()
+
+    brightness = get_setting("brightness")
+    freq_from = get_setting("spectrum_visualizer_freq_from")
+    freq_to = get_setting("spectrum_visualizer_freq_to")
+    dnr = get_setting("spectrum_visualizer_dnr")
+    droprate = get_setting("spectrum_visualizer_droprate")
+    rise_smoothness = get_setting("spectrum_visualizer_rise_smoothness")
+    lerp = get_setting("spectrum_visualizer_lerp")
+    window_length_seconds = get_setting("spectrum_visualizer_window_length_seconds")
+
+    cmd = [
+        "sudo",
+        "/home/hoolacane/hoolacane-rpi-led-matrix/music-synced/spectrum-visualizer",
+        f'{freq_from}',
+        f'{freq_to}',
+        f'{brightness}',
+        f'{dnr}',
+        f'{droprate}',
+        f'{rise_smoothness}',
+        f'{lerp}',
+        f'{window_length_seconds}'
+    ]
+
+    process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    print(f"Started process with PID {process.pid}")
+    _last_process = process

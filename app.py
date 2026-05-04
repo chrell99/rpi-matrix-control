@@ -22,6 +22,7 @@ from routes.index import setup_index
 from routes.strobe import setup_strobe
 from routes.mediaUpload import setup_mediaUpload
 from routes.settings import setup_settings
+from routes.musicSync import setup_musicsync
 
 CONFIG_FILE = 'config.json'
 
@@ -61,9 +62,9 @@ def create_app(media_folder, thumb_folder, stream_folder):
         
     @app.post('/default_strobe')
     def default_strobe():
-        on_time = get_setting("strobe_settings.on_time_ms")
-        off_time = get_setting("strobe_settings.off_time_ms")
-        brightness = get_setting("strobe_settings.brightness")
+        on_time = get_setting("strobe_settings_on_time_ms")
+        off_time = get_setting("strobe_settings_off_time_ms")
+        brightness = get_setting("strobe_settings_brightness")
 
         start_strobe(on_time, off_time, brightness)
 
@@ -76,6 +77,8 @@ def create_app(media_folder, thumb_folder, stream_folder):
     setup_mediaUpload(app, media_folder, thumb_folder)
 
     setup_settings(app)
+
+    setup_musicsync(app)
 
     return app
 

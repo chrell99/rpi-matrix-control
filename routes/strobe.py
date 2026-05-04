@@ -33,9 +33,9 @@ def setup_strobe(app):
             )
 
             #Save strobe settings for quick action button
-            set_setting("strobe_settings.on_time_ms", on_time)
-            set_setting("strobe_settings.off_time_ms", off_time)
-            set_setting("strobe_settings.brightness", brightness)
+            set_setting("strobe_settings_on_time_ms", on_time)
+            set_setting("strobe_settings_off_time_ms", off_time)
+            set_setting("strobe_settings_brightness", brightness)
 
             return {
                 "status": "ok",

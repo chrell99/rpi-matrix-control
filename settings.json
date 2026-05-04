@@ -1,25 +1,29 @@
 {
-    "brightness": 100,
+    "brightness": "50",
     "names": [
         "MCTung",
         "Theis",
         "Steriode Bob",
-        "Sp\u00f8ge",
-        "Emmanuel",
+        "Spøge",
+        "Emse",
         "Mad Mor Minus",
-        "S\u00f8by",
+        "Søby",
         "Thiesen",
-        "Martin \u00d8",
+        "Martin ø",
         "Martin C",
         "Burger King aka Gorm",
         "Nicki"
     ],
-    "strobe_settings": {
-        "brightness": 100,
-        "off_time_ms": 100,
-        "on_time_ms": 10
-    },
-    "strobe_settings.on_time_ms": 120,
-    "strobe_settings.off_time_ms": 100,
-    "strobe_settings.brightness": 50
+    "strobe_settings_on_time_ms": "10",
+    "strobe_settings_off_time_ms": "120",
+    "strobe_settings_brightness": "100",
+    "strobe_to_beat_sensitivity": "6",
+    "strobe_to_beat_window": "20",
+    "spectrum_visualizer_freq_from": "50",
+    "spectrum_visualizer_freq_to": "6000",
+    "spectrum_visualizer_dnr": "35",
+    "spectrum_visualizer_droprate": "6",
+    "spectrum_visualizer_rise_smoothness": "0.9",
+    "spectrum_visualizer_lerp": "0.5",
+    "spectrum_visualizer_window_length_seconds": "5"
 }
