@@ -159,18 +159,18 @@ def start_name_picker():
     cmd = [
         "sudo",
         "/home/hoolacane/hoolacane-rpi-led-matrix/custom-utils/name-picker",
-        f'-B {brightness}',
-        f'-s {starting_speed}',
-        f'-F {friction}',
-        f'-m {min_speed}',
-        f'-f {main_font}',
-        f'-g {secondary_font}',
-        f'-T {top_text}',
-        f'-U {top_text_speed}',
-        f'-L {bottom_text}',
-        f'-V {bottom_text_speed}',
-        f'-G {top_bottom_text_gap}'
-        f'-i {names_string}'
+        "-B", str(brightness),
+        "-s", str(starting_speed),
+        "-F", str(friction),
+        "-m", str(min_speed),
+        "-f", main_font,
+        "-g", secondary_font,
+        "-T", top_text,
+        "-U", str(top_text_speed),
+        "-L", bottom_text,
+        "-V", str(bottom_text_speed),
+        "-G", str(top_bottom_text_gap),
+        "-i", names_string
     ]
 
     if get_setting("name_picker_celebration"):
