@@ -23,6 +23,7 @@ from routes.strobe import setup_strobe
 from routes.mediaUpload import setup_mediaUpload
 from routes.settings import setup_settings
 from routes.musicSync import setup_musicsync
+from routes.namePicker import setup_namePicker
 
 CONFIG_FILE = 'config.json'
 
@@ -79,6 +80,8 @@ def create_app(media_folder, thumb_folder, stream_folder):
     setup_settings(app)
 
     setup_musicsync(app)
+
+    setup_namePicker(app)
 
     return app
 

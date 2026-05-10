@@ -1,0 +1,195 @@
+% rebase('base.html', title="Name Picker")
+
+<div class="app-container">
+    <!-- App Trigger Section -->
+    <div class="button-grid">
+        <div class="gif-card" onclick="triggerApp('name_picker')">
+            <div class="media-container">
+                <div class="name-placeholder">?</div>
+            </div>
+            <span class="label">Start Name Picker</span>
+        </div>
+    </div>
+
+    <!-- Filtered Settings Section -->
+    <div class="settings-container">
+        <h3>Name Picker Settings</h3>
+        
+        <form action="/settings/update" method="post" class="settings-form">
+            % for key, value in settings.items():
+                % if key.startswith("name_picker"):
+                    <div class="setting-group">
+                        <!-- Removes 'name_picker_' from label for a cleaner look -->
+                        <label for="{{key}}">{{key.replace('name_picker_', '').replace('_', ' ').upper()}}</label>
+                        
+                        % if isinstance(value, list):
+                            <input type="text" name="{{key}}" value="{{', '.join(value)}}" placeholder="item1, item2, item3">
+                            <small>List of values (comma-separated)</small>
+                        % elif isinstance(value, bool):
+                            <input type="checkbox" name="{{key}}" {{'checked' if value else ''}} class="toggle-switch">
+                        % else:
+                            <input type="text" name="{{key}}" value="{{value}}">
+                        % end
+                    </div>
+                % end
+            % end
+            
+            <div class="form-actions">
+                <button type="submit" class="action-btn">SAVE SETTINGS</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Layout Containers */
+    .app-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+        font-family: sans-serif;
+        gap: 40px;
+    }
+
+    /* Card Styling - Updated to match System Settings aesthetic */
+    .button-grid {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .gif-card {
+        background: #222; /* Matches settings container */
+        border: 2px solid #444;
+        border-radius: 8px; /* Square-ish match */
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .gif-card:hover {
+        transform: scale(1.05);
+        border-color: #ff0000; /* Matching your very first original hover color */
+    }
+
+    .media-container {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #111;
+        border-radius: 4px;
+        margin-bottom: 15px;
+    }
+
+    .name-placeholder {
+        color: white;
+        font-size: 64px;
+        font-weight: bold;
+    }
+
+    .label {
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+    /* Settings Styling - Direct match to your System Settings code */
+    .settings-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #222;
+        border-radius: 8px;
+        color: white;
+    }
+
+    .settings-container h3 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+        border-bottom: 1px solid #444;
+        padding-bottom: 10px;
+        color: #ccc;
+    }
+
+    .settings-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .setting-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #444;
+    }
+
+    .setting-group label {
+        font-weight: bold;
+        color: #ccc;
+        font-size: 0.9rem;
+    }
+
+    .setting-group input[type="text"] {
+        background: #333;
+        border: 1px solid #555;
+        color: white;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .setting-group small {
+        color: #888;
+        font-style: italic;
+        margin-top: 5px;
+    }
+
+    .form-actions {
+        margin-top: 10px;
+        text-align: right;
+    }
+
+    .action-btn {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .action-btn:hover {
+        opacity: 0.9;
+    }
+
+    .toggle-switch {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function triggerApp(appName) {
+        fetch('/trigger_namePicker', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("Response:", data);
+        })
+        .catch(err => console.error("Error:", err));
+    }
+</script>
