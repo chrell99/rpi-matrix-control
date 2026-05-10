@@ -36,10 +36,3 @@ Command to show the spectrum visualizer
 ```
 sudo ./spectrum-visualizer 50 8000 100 35 7 1 0.9 1
 ```
-
-TODO:
-Roulette function
-User sessions
-Move files to folder and add to gitignore
-Set lower limit for the visualizer and strobe to beat
-Fix strobe to freq when average gets to close to current over time
