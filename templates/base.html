@@ -13,15 +13,13 @@
         <nav id="menu" class="hidden">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/mediaControl">Media Control</a></li>
                 <li><a href="/settings">Settings</a></li>
-            </ul>
-            <ul>
-                <li><a href="/strobe">Strobe</a></li>
                 <li><a href="/mediaUpload">Upload media</a></li>
-                <li><a href="/musicsync">Music Sync</a></li>
             </ul>
             <ul>
+                <li><a href="/mediaControl">Media Control</a></li>
+                <li><a href="/strobe">Strobe</a></li>
+                <li><a href="/musicsync">Music Sync</a></li>
                 <li><a href="/namePicker">Name picker</a></li>
             </ul>
         </nav>
@@ -135,6 +133,28 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
+    @media (max-width: 600px) {
+    header {
+        padding: 10px 5px; /* Less side padding */
+    }
+
+    .slider-title {
+        display: none; /* Hide the word "Brightness" on mobile */
+    }
+
+    .action-btn {
+        padding: 8px 12px; /* Smaller buttons */
+        font-size: 14px;
+    }
+
+    #brightness-slider {
+        width: 80px; /* Narrower slider */
+    }
+
+    .brightness-wrapper {
+        margin: 0 5px !important; /* Tighten spacing */
+    }
+}
 
 </style>
 <script>

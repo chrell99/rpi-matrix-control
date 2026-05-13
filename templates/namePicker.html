@@ -1,7 +1,6 @@
 % rebase('base.html', title="Name Picker")
 
 <div class="app-container">
-    <!-- App Trigger Section -->
     <div class="button-grid">
         <div class="gif-card" onclick="triggerApp('name_picker')">
             <div class="media-container">
@@ -9,9 +8,21 @@
             </div>
             <span class="label">Start Name Picker</span>
         </div>
+
+        <div class="slurke-control-panel">
+            <div class="slider-section">
+                <label id="max-label" class="slider-label">Max slurke: 5</label>
+                <input type="range" id="max-val" min="1" max="10" value="5" class="max-slider" 
+                    oninput="updateSliderLabel(this.value)"
+                    onchange="saveSliderValue(this.value)">
+            </div>
+            
+            <button class="trigger-btn-large" onclick="updateAndTrigger()">
+                Skiltet vælger
+            </button>
+        </div>
     </div>
 
-    <!-- Filtered Settings Section -->
     <div class="settings-container">
         <h3>Name Picker Settings</h3>
         
@@ -19,14 +30,24 @@
             % for key, value in settings.items():
                 % if key.startswith("name_picker"):
                     <div class="setting-group">
-                        <!-- Removes 'name_picker_' from label for a cleaner look -->
                         <label for="{{key}}">{{key.replace('name_picker_', '').replace('_', ' ').upper()}}</label>
                         
                         % if isinstance(value, list):
                             <input type="text" name="{{key}}" value="{{', '.join(value)}}" placeholder="item1, item2, item3">
                             <small>List of values (comma-separated)</small>
                         % elif isinstance(value, bool):
-                            <input type="checkbox" name="{{key}}" {{'checked' if value else ''}} class="toggle-switch">
+                            <div class="toggle-wrapper">
+                                <input type="hidden" name="{{key}}" value="false">
+                                <label class="switch">
+                                    <input type="checkbox" 
+                                        name="{{key}}" 
+                                        id="{{key}}" 
+                                        value="true"
+                                        class="toggle-switch"
+                                        {{'checked' if value else ''}}>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
                         % else:
                             <input type="text" name="{{key}}" value="{{value}}">
                         % end
@@ -42,7 +63,6 @@
 </div>
 
 <style>
-    /* Layout Containers */
     .app-container {
         display: flex;
         flex-direction: column;
@@ -52,16 +72,18 @@
         gap: 40px;
     }
 
-    /* Card Styling - Updated to match System Settings aesthetic */
     .button-grid {
         width: 100%;
         max-width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
     .gif-card {
-        background: #222; /* Matches settings container */
+        background: #222; 
         border: 2px solid #444;
-        border-radius: 8px; /* Square-ish match */
+        border-radius: 8px; 
         padding: 20px;
         text-align: center;
         cursor: pointer;
@@ -70,7 +92,7 @@
 
     .gif-card:hover {
         transform: scale(1.05);
-        border-color: #ff0000; /* Matching your very first original hover color */
+        border-color: #ff0000;
     }
 
     .media-container {
@@ -90,6 +112,14 @@
         font-weight: bold;
     }
 
+    .trigger-btn {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        width: 100%;
+    }
+
     .label {
         color: white;
         font-weight: bold;
@@ -98,7 +128,6 @@
         letter-spacing: 1px;
     }
 
-    /* Settings Styling - Direct match to your System Settings code */
     .settings-container {
         width: 100%;
         max-width: 600px;
@@ -178,18 +207,121 @@
         height: 20px;
         cursor: pointer;
     }
+
+    .slurke-control-panel {
+        width: 100%;
+        max-width: 300px;
+        background: #1a1a1a;
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid #333;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .slider-section {
+        margin-bottom: 20px;
+    }
+
+    .slider-label {
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    .max-slider {
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .trigger-btn-large {
+        width: 100%;
+        background: red;
+        color: white;
+        border: none;
+        padding: 15px 10px;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 20px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out, background 0.2s;
+        text-transform: uppercase;
+    }
+
+    .trigger-btn-large:hover {
+        transform: scale(1.08);
+    }
+
+    .trigger-btn-large:active {
+        transform: scale(0.95);
+    }
+
+    @media (max-width: 600px) {
+        .settings-container {
+            width: 260px;
+        }
+    }
 </style>
 
 <script>
     function triggerApp(appName) {
-        fetch('/trigger_namePicker', {
+        return fetch('/trigger_namePicker', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => response.text())
-        .then(data => {
-            console.log("Response:", data);
-        })
-        .catch(err => console.error("Error:", err));
+        .then(data => console.log("App Triggered:", data))
+        .catch(err => console.error("Error triggering app:", err));
+    }
+
+    function updateSliderLabel(val) {
+        document.getElementById('max-label').innerText = 'Max slurke: ' + val;
+    }
+
+    function saveSliderValue(val) {
+        localStorage.setItem('namePickerMaxSlurke', val);
+    }
+
+    function loadSavedSliderValue() {
+        const savedValue = localStorage.getItem('namePickerMaxSlurke');
+        if (savedValue) {
+            const slider = document.getElementById('max-val');
+            slider.value = savedValue;
+            updateSliderLabel(savedValue);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadSavedSliderValue);
+
+    async function updateAndTrigger() {
+        const maxVal = document.getElementById('max-val').value;
+        
+        const randomNumber = Math.floor(Math.random() * maxVal) + 1;
+        const text = `Drik ${randomNumber}`;
+
+        const formData = new URLSearchParams();
+        formData.append('name_picker_top_text', text);
+        formData.append('name_picker_bottom_text', text);
+
+        try {
+            
+            const updateResponse = await fetch('/settings/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData
+            });
+
+            if (updateResponse.ok) {
+                console.log("Settings updated successfully");
+                await triggerApp('name_picker');
+            } else {
+                console.error("Failed to update settings");
+            }
+        } catch (error) {
+            console.error("Workflow error:", error);
+        }
     }
 </script>

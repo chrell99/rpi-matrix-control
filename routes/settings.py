@@ -31,7 +31,12 @@ def setup_settings(app):
                     processed_value = [item.strip() for item in new_value.split(',') if item.strip()]
                     set_setting(key, processed_value)
                 else:
-                    # Handle standard types
-                    set_setting(key, new_value)
+                    if new_value == "true":
+                        set_setting(key, True)
+                    elif new_value == "false":
+                        set_setting(key, False)
+                    else:
+                        set_setting(key, new_value)
                     
-        return redirect('/settings')
+        previous_page = request.headers.get('Referer', '/')
+        return redirect(previous_page)

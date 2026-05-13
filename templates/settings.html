@@ -12,7 +12,18 @@
                     <input type="text" name="{{key}}" value="{{', '.join(value)}}" placeholder="item1, item2, item3">
                     <small>List of values (comma-separated)</small>
                 % elif isinstance(value, bool):
-                    <input type="checkbox" name="{{key}}" {{'checked' if value else ''}} class="toggle-switch">
+                    <div class="toggle-wrapper">
+                        <input type="hidden" name="{{key}}" value="false">
+                        <label class="switch">
+                            <input type="checkbox" 
+                                name="{{key}}" 
+                                id="{{key}}" 
+                                value="true"
+                                class="toggle-switch"
+                                {{'checked' if value else ''}}>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
                 % else:
                     <input type="text" name="{{key}}" value="{{value}}">
                 % end
