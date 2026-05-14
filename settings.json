@@ -43,6 +43,5 @@
     "roulette_ball_speed": 37.5,
     "roulette_friction": 0.15,
     "roulette_min_speed": 0.3,
-    "roulette_max_brightness": 100,
     "roulette_do_fireworks": false
 }

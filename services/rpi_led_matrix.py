@@ -195,7 +195,7 @@ def start_roulette():
     ball_speed = get_setting("roulette_ball_speed")
     friction = get_setting("roulette_friction")
     min_speed = get_setting("roulette_min_speed")
-    brightness = get_setting("roulette_max_brightness")
+    brightness = get_setting("brightness")
 
     cmd = [
         "sudo",
