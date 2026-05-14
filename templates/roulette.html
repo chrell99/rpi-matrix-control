@@ -1,0 +1,94 @@
+% rebase('base.html', title="Home")
+<div class="app-container">
+    <div class="button-grid">
+        <div class="gif-card" onclick="triggerApp('roulette')">
+            <div class="media-container">
+                <img src="/static/images/roulette.gif" alt="App One">
+            </div>
+            <span class="label">Roulette</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .app-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; 
+        padding: 20px;
+        font-family: sans-serif;
+    }
+
+    .button-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 400px; 
+    }
+
+    .gif-card {
+        background: #444;
+        border: 2px solid #555;
+        border-radius: 8px;
+        padding: 10px; 
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .gif-card:active {
+        transform: scale(0.98);
+        border-color: #ff0000;
+    }
+
+    .media-container {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #222;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        overflow: hidden;
+    }
+
+    .media-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; 
+    }
+
+    .gif-card .label {
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    @media (max-width: 480px) {
+        .button-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+    }
+</style>
+
+<script>
+    function triggerApp(appName) {
+        console.log("Requesting: " + appName);
+        fetch('/trigger_roulette', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ app_id: appName })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => console.log("Success:", data))
+        .catch(err => console.error("Error triggering application:", err));
+    }
+</script>

@@ -180,3 +180,39 @@ def start_name_picker():
 
     print(f"Started process with PID {process.pid}")
     _last_process = process
+
+def start_roulette():
+    global _last_process
+
+    stop_running_process()
+
+    font_dir = Path("/home/hoolacane/hoolacane-rpi-led-matrix")
+
+    bdf_font = str(font_dir / get_setting("roulette_bdf_font_file"))
+    winner_font = str(font_dir / get_setting("roulette_winner_font_file"))
+    
+    speed = get_setting("roulette_speed")
+    ball_speed = get_setting("roulette_ball_speed")
+    friction = get_setting("roulette_friction")
+    min_speed = get_setting("roulette_min_speed")
+    brightness = get_setting("roulette_max_brightness")
+
+    cmd = [
+        "sudo",
+        "/home/hoolacane/hoolacane-rpi-led-matrix/custom-utils/roulette",
+        "-f", bdf_font,
+        "-w", winner_font,
+        "-s", str(speed),
+        "-b", str(ball_speed),
+        "-F", str(friction),
+        "-m", str(min_speed),
+        "-B", str(brightness)
+    ]
+
+    if get_setting("roulette_do_fireworks"):
+        cmd.append("-e")
+
+    process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    print(f"Started roulette process with PID {process.pid}")
+    _last_process = process
